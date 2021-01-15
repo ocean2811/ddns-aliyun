@@ -64,7 +64,7 @@ var updateCmd = &cobra.Command{
 				return errors.New("type 'F' must with 'dest' flag")
 			}
 
-			gDest, err = getPublicIP()
+			gDest, err = getPublicIPV2()
 			if err != nil {
 				return err
 			}

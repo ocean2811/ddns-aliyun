@@ -18,7 +18,7 @@ var ipCmd = &cobra.Command{
 	Use:   "ip",
 	Short: "Get public IP.",
 	Run: func(cmd *cobra.Command, args []string) {
-		ip, err := getPublicIP()
+		ip, err := getPublicIPV2()
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -108,4 +108,39 @@ func getPublicIP() (string, error) {
 			}
 		}
 	}
+}
+
+func getPublicIPV2() (string, error) {
+	//IP query serialization
+	errArray := make([]error, 0, myip.DetectorNum)
+
+	ip, err := myip.GetByJSONIP()
+	if err == nil {
+		debugPrintf("GetByJSONIP: %v\n", ip)
+		return ip, nil
+	}
+	debugPrintf("GetByJSONIP: %+v\n", err)
+	errArray = append(errArray, err)
+
+	ip, err = myip.GetByIPIP()
+	if err == nil {
+		debugPrintf("GetByIPIP: %v\n", ip)
+		return ip, nil
+	}
+	debugPrintf("GetByIPIP: %+v\n", err)
+	errArray = append(errArray, err)
+
+	ip, err = myip.GetByIFConfig()
+	if err == nil {
+		debugPrintf("GetByIFConfig: %v\n", ip)
+		return ip, nil
+	}
+	debugPrintf("GetByIFConfig: %+v\n", err)
+	errArray = append(errArray, err)
+
+	out := strings.Builder{}
+	for _, e := range errArray {
+		out.WriteString(fmt.Sprintln(e))
+	}
+	return "", errors.New(out.String())
 }
