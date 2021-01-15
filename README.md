@@ -41,39 +41,39 @@ DDNS for aliyun.com
 
 ```shell
 # 修改(添加)主域名解析,即主域名 domain.com 解析为 本机公网IP
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src domain.com
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src domain.com
 
 # 修改(添加)泛域名解析,即所有二级域名 *.domain.com 均解析为 本机公网IP
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src *.domain.com
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src *.domain.com
 
 # 修改(添加)指定二级域名解析,即二级域名 your.domain.com 解析为 本机公网IP
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src your.domain.com
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src your.domain.com
 ```
 
 ### 修改(添加)域名解析为指定IP
 
 ```shell
 # 修改(添加)主域名解析,即主域名 domain.com 解析为 9.9.9.9
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src domain.com --dest 9.9.9.9
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src domain.com --dest 9.9.9.9
 
 # 修改(添加)泛域名解析,即所有二级域名 *.domain.com 均解析为 9.9.9.9
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src *.domain.com --dest 9.9.9.9
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src *.domain.com --dest 9.9.9.9
 
 # 修改(添加)指定二级域名解析,即二级域名 your.domain.com 解析为 9.9.9.9
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src your.domain.com --dest 9.9.9.9
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src your.domain.com --dest 9.9.9.9
 ```
 
 ### 修改(添加)域名解析为指定IP
 
 ```shell
 # 修改(添加)主域名解析,即主域名 domain.com 解析为 9.9.9.9
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src domain.com --dest 9.9.9.9
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src domain.com --dest 9.9.9.9
 
 # 修改(添加)泛域名解析,即所有二级域名 *.domain.com 均解析为 9.9.9.9
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src *.domain.com --dest 9.9.9.9
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src *.domain.com --dest 9.9.9.9
 
 # 修改(添加)指定二级域名解析,即二级域名 your.domain.com 解析为 9.9.9.9
-/ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src your.domain.com --dest 9.9.9.9
+./ddns-aliyun update -i your-access-key-id -s your-access-key-secret -t A --src your.domain.com --dest 9.9.9.9
 ```
 
 ### 修改(添加)二级域名转发到指定URL
