@@ -1,7 +1,7 @@
 package ddns
 
 import (
-	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
@@ -68,9 +68,14 @@ func (ddns *DDNS) DescribeDomainRecords(domain string) ([]alidns.Record, error) 
 // DescribeSubDomainRecords Describe subDomain
 func (ddns *DDNS) DescribeSubDomainRecords(subDomain string) ([]alidns.Record, error) {
 	req := alidns.CreateDescribeSubDomainRecordsRequest()
-	req.SubDomain = subDomain
 	req.SetConnectTimeout(gcConnectTimeout)
 	req.SetReadTimeout(gcReadTimeout)
+
+	req.SubDomain = subDomain
+	if strings.HasPrefix(subDomain, "*.") {
+		req.SubDomain = subDomain
+		req.DomainName = subDomain[2:]
+	}
 
 	resp, err := ddns.client.DescribeSubDomainRecords(req)
 	if err != nil {
@@ -107,7 +112,7 @@ func (ddns *DDNS) UpdateDomainRecord(recordID, typ, rr, value string) error {
 		return errors.Wrap(err, "alidns UpdateDomainRecord has error")
 	}
 
-	fmt.Println(resp.String())
+	// fmt.Println(resp.String())
 
 	if !resp.IsSuccess() {
 		return errors.New("alidns UpdateDomainRecord is not success: " + resp.String())
@@ -120,10 +125,17 @@ func (ddns *DDNS) UpdateDomainRecord(recordID, typ, rr, value string) error {
 func (ddns *DDNS) AddDomainRecord(typ, domain, value string) error {
 	req := alidns.CreateAddDomainRecordRequest()
 	req.Type = typ
-	req.Domain = domain
 	req.Value = value
 	req.SetConnectTimeout(gcConnectTimeout)
 	req.SetReadTimeout(gcReadTimeout)
+
+	req.RR = "@"
+	req.DomainName = domain
+	domainSlice := strings.Split(domain, ".")
+	if len(domainSlice) > 2 {
+		req.RR = strings.Join(domainSlice[:len(domainSlice)-2], ".")
+		req.DomainName = strings.Join(domainSlice[len(domainSlice)-2:], ".")
+	}
 
 	resp, err := ddns.client.AddDomainRecord(req)
 	if err != nil {

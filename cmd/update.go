@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/ocean2811/ddns-aliyun/pkg/ddns"
-	"github.com/pkg/errors"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -35,8 +35,7 @@ func init() {
 	updateCmd.Flags().StringVarP(&gSrc, "src", "", "", "your source URL. DNS will convert source URL to destination URL(IP)")
 	updateCmd.MarkFlagRequired("src")
 
-	updateCmd.Flags().StringVarP(&gDest, "dest", "", "", "your destination URL(IP). DNS will convert source URL to destination URL(IP)")
-	updateCmd.MarkFlagRequired("dest")
+	updateCmd.Flags().StringVarP(&gDest, "dest", "", "", "your destination URL(IP). DNS will convert source URL to destination URL(IP).\ndest will be current public IP if not specified.")
 
 	rootCmd.AddCommand(updateCmd)
 }
@@ -60,6 +59,17 @@ var updateCmd = &cobra.Command{
 			return err
 		}
 
+		if len(gDest) == 0 {
+			if gType == gcTypeForwardURL {
+				return errors.New("type 'F' must with 'dest' flag")
+			}
+
+			gDest, err = getPublicIP()
+			if err != nil {
+				return err
+			}
+		}
+
 		records, err := client.DescribeSubDomainRecords(gSrc)
 		if err != nil {
 			return err
@@ -73,7 +83,7 @@ var updateCmd = &cobra.Command{
 			}
 
 			if r.Value == gDest { //No need to change
-				fmt.Printf("No need to change.\n")
+				fmt.Printf("No need to change.url=%s,current=%s\n", gSrc, gDest)
 				return nil
 			}
 
@@ -83,11 +93,17 @@ var updateCmd = &cobra.Command{
 				return err
 			}
 
-			fmt.Printf("Update domain record. from=%s,to=%s\n", r.Value, gDest)
+			fmt.Printf("Update domain record. url=%s,from=%s,to=%s\n", gSrc, r.Value, gDest)
 			return nil
 		}
 
-		//TODO: Add a new record
-		return client.AddDomainRecord(recordType, gSrc, gDest)
+		// Add a new record
+		err = client.AddDomainRecord(recordType, gSrc, gDest)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("Add domain record. url=%s,record=%s\n", gSrc, gDest)
+
+		return err
 	},
 }

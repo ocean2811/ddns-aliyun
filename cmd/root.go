@@ -24,7 +24,13 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		if gDebug {
-			fmt.Printf("%+v\n", err)
+			debugPrintf("%+v\n", err)
 		}
+	}
+}
+
+func debugPrintf(format string, a ...interface{}) {
+	if gDebug {
+		fmt.Printf(format, a...)
 	}
 }

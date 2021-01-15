@@ -4,14 +4,21 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"time"
 
 	"github.com/pkg/errors"
 )
 
 const (
+	// DetectorNum means have DetectorNum way to get ip
+	DetectorNum = 3
+)
+
+const (
 	gcURLJSONIP   = "https://jsonip.com"
 	gcURLIFConfig = "https://ifconfig.me/ip"
+	gcURLIPIP     = "https://myip.ipip.net"
 
 	gcTimeout = time.Second * 5
 )
@@ -63,4 +70,27 @@ func GetByIFConfig() (string, error) {
 	}
 
 	return string(b), nil
+}
+
+// GetByIPIP by https://myip.ipip.net
+func GetByIPIP() (string, error) {
+	client := http.Client{
+		Timeout: gcTimeout,
+	}
+
+	resp, err := client.Get(gcURLIPIP)
+	if err != nil {
+		return "", errors.Wrap(err, "get ip by "+gcURLIPIP)
+	}
+
+	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", errors.Wrap(err, "read body from "+gcURLIPIP)
+	}
+
+	reg := regexp.MustCompile(`\d+\.\d+\.\d+\.\d+`)
+
+	return reg.FindAllString(string(b), -1)[0], nil
 }
