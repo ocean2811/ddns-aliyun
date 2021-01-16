@@ -16,19 +16,20 @@ DDNS for aliyun.com
 
 - 登录阿里云控制台 [https://ak-console.aliyun.com](https://ak-console.aliyun.com/)页面获取**AccessKeyID**和**AccessKeySecret**.如果使用RAM子账户,则需授权该子账户[AliyunDNSFullAccess](https://ram.console.aliyun.com/policies/AliyunDNSFullAccess/System/content)权限
 - 将自己的域名转入阿里云,并确保域名解析状态正常
+- 运行`ddns-aliyun ip`确认CPU架构是否支持与网络连通情况
 
 ## 使用方式
 
 ### 帮助信息
 
 ```shell
-./ddns_aliyun help
+./ddns-aliyun help
 ```
 
 ### 查询本地公网IP
 
 ```shell
-./ddns_aliyun ip
+./ddns-aliyun ip
 ```
 
 ### 查询名下指定域名的所有DNS记录
@@ -86,3 +87,21 @@ DDNS for aliyun.com
 ### 作为库引用
 
 关注/pkg目录下源码即可
+
+## Linux自动运行(仅供参考)
+
+```shell
+# 每隔20分钟执行: `修改(添加)主域名解析,即主域名 domain.com 解析为 本机公网IP`,并将日志输出到/tmp/ddns-aliyun.log
+*/20 * * * * /usr/local/bin/ddns-aliyun -i your-access-key-id -s your-access-key-secret -t A --src domain.com >> /tmp/ddns-aliyun.log
+# 每天凌晨3点清空日志
+00 03 * * * echo "" > /tmp/ddns-aliyun.log
+```
+
+
+
+## Q&A
+
+1. 在OpenWrt运行时出现 `ddns-aliyun: not found` 或 `ddns-aliyun: line 1: syntax error: unexpected "("`等无法运行问题
+
+   > 请依次尝试release中所有包含`linux`字样的发行版,如果所有发行版均不可用请在issue留言,留言中请包含CPU型号与操作系统信息
+

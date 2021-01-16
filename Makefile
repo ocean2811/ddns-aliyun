@@ -9,4 +9,10 @@ linux:
 	GOOS=linux GOARCH=amd64 go build -ldflags "-X 'github.com/ocean2811/ddns-aliyun/cmd.version=$(rev-full)'" -o ddns-aliyun
 
 windows:
-	GOOS=windows GOARCH=amd64 go build -ldflags "-X 'github.com/ocean2811/ddns-aliyun/cmd.version=$(rev-full)'" -o ddns-aliyun
+	GOOS=windows GOARCH=amd64 go build -ldflags "-X 'github.com/ocean2811/ddns-aliyun/cmd.version=$(rev-full)'" -o ddns-aliyun.exe
+
+mipsle:
+	GOOS=linux GOARCH=mipsle go build -ldflags "-X 'github.com/ocean2811/ddns-aliyun/cmd.version=$(rev-full)'" -o ddns-aliyun
+
+mips:
+	GOOS=linux GOARCH=mips go build -ldflags "-X 'github.com/ocean2811/ddns-aliyun/cmd.version=$(rev-full)'" -o ddns-aliyun
