@@ -103,5 +103,4 @@ DDNS for aliyun.com
 
 1. 在OpenWrt运行时出现 `ddns-aliyun: not found` 或 `ddns-aliyun: line 1: syntax error: unexpected "("`等无法运行问题
 
-   > 请依次尝试release中所有包含`linux`字样的发行版,如果所有发行版均不可用请在issue留言,留言中请包含CPU型号与操作系统信息
-
+   > 请依次尝试release中所有包含`linux`字样的发行版,如果所有发行版均不可用请在issue留言,留言中请包含CPU型号与操作系统信息`uname -a`
